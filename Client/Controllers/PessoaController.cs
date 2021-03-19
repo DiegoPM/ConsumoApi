@@ -16,7 +16,7 @@ namespace Client.Controllers
 {
     public class PessoaController : Controller
     {
-        // GET: Pessoa
+        [HttpGet]
         public ActionResult Index()
         {
             IEnumerable<PessoaViewModel> pessoas = null;
@@ -42,7 +42,7 @@ namespace Client.Controllers
                 return View(pessoas);
             }
         }
-        [HttpGet]
+        [HttpPost]
         public ActionResult Create()
         {
             return View();
@@ -66,7 +66,7 @@ namespace Client.Controllers
                     }
                     //Segunda forma
                     {
-                        //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     }
                     HttpRequestMessage request = new HttpRequestMessage();
                     request.Content = new StringContent(JsonConvert.SerializeObject(pessoa),Encoding.UTF8,"application/json");
@@ -87,7 +87,7 @@ namespace Client.Controllers
             }
             
         }
-
+        [HttpPut]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -111,7 +111,7 @@ namespace Client.Controllers
             }
             return View(pessoa);
         }
-        [HttpPost]
+        [HttpPut]
         public ActionResult Edit(PessoaViewModel pessoa)
         {
             if (pessoa == null)
@@ -143,7 +143,6 @@ namespace Client.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://localhost:52025/api/");
-                //HTTP DELETE
                 var deleteTask = client.DeleteAsync("pessoa/" + id.ToString());
                 deleteTask.Wait();
                 var result = deleteTask.Result;
